@@ -1,0 +1,17 @@
+services:
+  studypilot:
+    build: .
+    container_name: studypilot
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3002:3000"
+    volumes:
+      - studypilot_data:/data
+    environment:
+      - PORT=3000
+      - DATA_DIR=/data
+      - NODE_ENV=production
+
+volumes:
+  studypilot_data:
+    driver: local
