@@ -71,19 +71,21 @@ const App = {
     await this._navigate(page);
   },
   async _navigate(page) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    document.getElementById(`page-${page}`)?.classList.add('active');
-    document.querySelector(`.nav-item[data-page="${page}"]`)?.classList.add('active');
+    const navItems = document.querySelectorAll('.nav-item');
+    const pages = document.querySelectorAll('.page');
+    const targetPage = document.getElementById(`page-${page}`);
+    const targetNav = document.querySelector(`.nav-item[data-page="${page}"]`);
+
+    // 1. On met à jour la navigation immédiatement
+    navItems.forEach(n => n.classList.remove('active'));
+    if (targetNav) targetNav.classList.add('active');
     document.getElementById('pgTitle').textContent = PAGE_TITLES[page];
+    
+    // 2. On ferme les menus mobiles
     document.getElementById('sideNav').classList.remove('mobile-open');
     document.getElementById('navScrim').classList.remove('open');
-    const main = document.getElementById('main');
-    if (main) main.scrollTop = 0;
-    window.scrollTo(0, 0);
-    document.getElementById('topbar')?.classList.remove('scrolled');
-    
-    // On attend explicitement que chaque page ait fini de charger ses données
+
+    // 3. CHARGEMENT DES DONNÉES (On attend ici)
     switch(page) {
       case 'dashboard': await DashboardPage.load(); break;
       case 'subjects':  await SubjectsPage.load(); break;
@@ -94,6 +96,16 @@ const App = {
       case 'progress':  await ProgressPage.load(); break;
       case 'settings':  await SettingsPage.load(); break;
     }
+
+    // 4. AFFICHAGE DE LA PAGE (Seulement quand les données sont prêtes)
+    pages.forEach(p => p.classList.remove('active'));
+    if (targetPage) targetPage.classList.add('active');
+
+    // 5. Scroll et Topbar
+    const main = document.getElementById('main');
+    if (main) main.scrollTop = 0;
+    window.scrollTo(0, 0);
+    document.getElementById('topbar')?.classList.remove('scrolled');
   },
   openModal(id) {
     const el = document.getElementById(id);
