@@ -53,7 +53,7 @@ const App = {
     this._fillSelects();
   },
   _fillSelects() {
-    ['noteSubject','resourceSubject','resourcesFilter','ttSubject'].forEach(id => {
+    ['resourceSubject','resourcesFilter','ttSubject'].forEach(id => {
       const el = document.getElementById(id); if (!el) return;
       const cur = el.value, isFilter = id.endsWith('Filter');
       el.innerHTML = `<option value="">${isFilter?'Toutes les matières':'Sans matière'}</option>`

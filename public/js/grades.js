@@ -113,7 +113,6 @@ const GradesPage = {
 
   openNew() {
     document.getElementById('gradeId').value = '';
-    document.getElementById('gradeSubject').value = this._selectedSubjectId || '';
     document.getElementById('gradeName').value = '';
     document.getElementById('gradeValue').value = '';
     document.getElementById('gradeMax').value = '20';
@@ -127,7 +126,6 @@ const GradesPage = {
     const g = this._grades.find(x => x.id === id);
     if (!g) return;
     document.getElementById('gradeId').value = g.id;
-    document.getElementById('gradeSubject').value = g.subject_id || '';
     document.getElementById('gradeName').value = g.name;
     document.getElementById('gradeValue').value = g.value;
     document.getElementById('gradeMax').value = g.max_value;
@@ -143,7 +141,7 @@ const GradesPage = {
     const max = parseFloat(document.getElementById('gradeMax').value) || 20;
     if (isNaN(value)) { toast('Note invalide', 'error'); return; }
     const data = {
-      subject_id: document.getElementById('gradeSubject').value || null,
+      subject_id: this._selectedSubjectId || null,
       name: document.getElementById('gradeName').value.trim(),
       value, max_value: max,
       coefficient: parseFloat(document.getElementById('gradeCoeff').value) || 1,
