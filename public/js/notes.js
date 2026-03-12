@@ -37,8 +37,8 @@ const NotesPage = {
     document.getElementById('noteContent').value = '';
     document.getElementById('noteSubject').value = '';
     document.getElementById('notePinned').checked = false;
+    document.getElementById('noteDeleteBtn').style.display = 'none';
     document.getElementById('modalNoteTitle').textContent = 'Nouvelle note';
-    this.switchTab('write');
     this._renderResources();
     App.openModal('modalNote');
   },
@@ -51,23 +51,20 @@ const NotesPage = {
     document.getElementById('noteContent').value = n.content || '';
     document.getElementById('noteSubject').value = n.subject_id || '';
     document.getElementById('notePinned').checked = !!n.pinned;
+    document.getElementById('noteDeleteBtn').style.display = '';
     document.getElementById('modalNoteTitle').textContent = 'Modifier la note';
-    this.switchTab('write');
     this._renderResources();
     App.openModal('modalNote');
   },
 
-  switchTab(tab) {
-    document.querySelectorAll('.etab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-    if (tab === 'preview') {
-      document.getElementById('noteContent').style.display = 'none';
-      const prev = document.getElementById('notePreview');
-      prev.style.display = '';
-      prev.innerHTML = '<p>' + renderMarkdown(document.getElementById('noteContent').value) + '</p>';
-    } else {
-      document.getElementById('noteContent').style.display = '';
-      document.getElementById('notePreview').style.display = 'none';
-    }
+  async delete(id) {
+    if (!id || !await App.confirmDelete('Supprimer cette note ?')) return;
+    try {
+      await API.del(`/notes/${id}`);
+      toast('Note supprimée');
+      App.closeModal('modalNote');
+      this.load();
+    } catch(e) { toast(e.message, 'error'); }
   },
 
   addResource() {

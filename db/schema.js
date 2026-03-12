@@ -123,4 +123,16 @@ module.exports = function initSchema(db) {
   ]) {
     try { db.exec(`ALTER TABLE tasks ADD COLUMN ${col} ${def}`); } catch(_) {}
   }
+
+  // Insertion des matières par défaut si vide
+  const count = db.prepare('SELECT COUNT(*) as c FROM subjects').get().c;
+  if (count === 0) {
+    const insert = db.prepare('INSERT INTO subjects (name, color, icon) VALUES (?, ?, ?)');
+    insert.run('Mathématiques', '#4285F4', 'calculate');
+    insert.run('Français', '#EA4335', 'history_edu');
+    insert.run('Histoire-Géo', '#FBBC05', 'public');
+    insert.run('Anglais', '#34A853', 'language');
+    insert.run('Physique-Chimie', '#673AB7', 'science');
+    insert.run('SVT', '#009688', 'biotech');
+  }
 };

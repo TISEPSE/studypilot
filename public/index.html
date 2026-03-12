@@ -208,18 +208,16 @@
         <div class="fg" style="flex:1"><input type="text" id="noteTitle" class="note-title-input" placeholder="Titre de la note…" required></div>
         <div class="fg" style="width:180px"><select id="noteSubject" class="filter-select" style="height:44px"><option value="">Sans matière</option></select></div>
       </div>
-      <div class="fg" style="flex:1">
-        <div class="editor-tabs">
-          <button class="etab active" data-tab="write" onclick="NotesPage.switchTab('write')"><span class="material-symbols-rounded">edit</span> Écrire</button>
-          <button class="etab" data-tab="preview" onclick="NotesPage.switchTab('preview')"><span class="material-symbols-rounded">preview</span> Aperçu</button>
-        </div>
-        <textarea id="noteContent" class="note-textarea" placeholder="Contenu (Markdown supporté)…"></textarea>
-        <div id="notePreview" class="note-preview" style="display:none"></div>
+      <div class="fg" style="flex:1;display:flex;flex-direction:column">
+        <textarea id="noteContent" class="note-textarea" placeholder="Contenu de la note…" style="flex:1;min-height:300px"></textarea>
       </div>
       <div id="noteResourcesList" class="note-resources"></div>
     </div>
     <div class="modal-actions" style="justify-content:space-between">
-      <label class="pin-label"><input type="checkbox" id="notePinned"><span class="material-symbols-rounded">push_pin</span> Épingler</label>
+      <div style="display:flex;align-items:center;gap:12px">
+        <label class="pin-label"><input type="checkbox" id="notePinned"><span class="material-symbols-rounded">push_pin</span> Épingler</label>
+        <button class="btn-text err" id="noteDeleteBtn" style="display:none" onclick="NotesPage.delete(document.getElementById('noteId').value)">Supprimer</button>
+      </div>
       <div style="display:flex;gap:8px"><button class="btn-text" onclick="App.closeModal('modalNote')">Annuler</button><button class="btn-filled" onclick="NotesPage.save()">Enregistrer</button></div>
     </div>
   </div>
