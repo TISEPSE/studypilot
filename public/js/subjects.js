@@ -8,9 +8,7 @@ const SubjectsPage = {
       grid.innerHTML = '<div class="empty-state"><span class="material-symbols-rounded">auto_stories</span><p>Ajoutez votre première matière !</p></div>';
       return;
     }
-    grid.innerHTML = subjects.map(s => {
-      const pct = s.target_hours > 0 ? Math.min(100, Math.round((s.total_minutes||0) / (s.target_hours * 60) * 100)) : null;
-      return `
+    grid.innerHTML = subjects.map(s => `
       <div class="subj-card">
         <div class="subj-stripe" style="background:${escHtml(s.color||'#006B5E')}"></div>
         <div class="subj-body">
@@ -25,19 +23,14 @@ const SubjectsPage = {
           </div>
           <div class="subj-stats">
             <span class="subj-stat"><span class="material-symbols-rounded">edit_note</span>${s.note_count||0} note${s.note_count!==1?'s':''}</span>
-            <span class="subj-stat"><span class="material-symbols-rounded">task_alt</span>${s.pending_tasks||0} tâche${s.pending_tasks!==1?'s':''}</span>
-            <span class="subj-stat"><span class="material-symbols-rounded">timer</span>${fmtMinutes(s.total_minutes||0)}</span>
+            <span class="subj-stat"><span class="material-symbols-rounded">task_alt</span>${s.pending_tasks||0} à faire</span>
           </div>
-          ${pct !== null ? `
-            <div class="prog-bar"><div class="prog-bar-fill" style="width:${pct}%;background:${s.color||'#006B5E'}"></div></div>
-            <div style="font-size:11px;color:var(--md-on-surface-var);margin-top:4px">${pct}% · objectif ${s.target_hours}h</div>` : ''}
           <div class="subj-actions">
             <button class="btn-text" onclick="SubjectsPage.openEdit(${s.id})"><span class="material-symbols-rounded">edit</span> Modifier</button>
             <button class="icon-btn" style="margin-left:auto" onclick="SubjectsPage.delete(${s.id})" title="Supprimer"><span class="material-symbols-rounded">delete</span></button>
           </div>
         </div>
-      </div>`;
-    }).join('');
+      </div>`).join('');
   },
 
   openNew() {

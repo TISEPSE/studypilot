@@ -25,7 +25,7 @@
 <nav class="side-nav" id="sideNav">
   <div class="nav-header">
     <div class="nav-logo"><img src="/favicon.svg" alt="StudyPilot" style="width:36px;height:36px;border-radius:9px;display:block"></div>
-    <div class="nav-brand">StudyPilot<small>Espace de révision</small></div>
+    <div class="nav-brand">StudyPilot<small>Gestionnaire d'études</small></div>
   </div>
   <span class="nav-sep">Menu</span>
   <ul class="nav-list">
@@ -35,7 +35,6 @@
     <li><a class="nav-item" data-page="resources" href="#resources"><span class="material-symbols-rounded">link</span><span class="nav-label">Ressources</span></a></li>
     <li><a class="nav-item" data-page="timetable" href="#timetable"><span class="material-symbols-rounded">grid_view</span><span class="nav-label">Emploi du temps</span></a></li>
     <li><a class="nav-item" data-page="grades" href="#grades"><span class="material-symbols-rounded">grade</span><span class="nav-label">Moyennes</span></a></li>
-    <li><a class="nav-item" data-page="progress" href="#progress"><span class="material-symbols-rounded">insights</span><span class="nav-label">Progression</span></a></li>
   </ul>
   <div class="nav-footer-sep"></div>
   <ul class="nav-list" style="padding-bottom:12px">
@@ -56,19 +55,29 @@
 
   <!-- DASHBOARD -->
   <div class="page active" id="page-dashboard">
-    <p class="page-brief">Vue d'ensemble de ton activité, de tes priorités et de ta progression récente.</p>
-    <div class="welcome-banner" id="welcomeBanner">
-      <h2 id="dashGreeting">Bonjour !</h2>
-      <p>Voici un aperçu de tes révisions aujourd'hui.</p>
-      <div class="wb-actions">
-        <button class="btn-filled" onclick="App.goTo('timetable')"><span class="material-symbols-rounded">grid_view</span> Emploi du temps</button>
-        <button class="btn-tonal" onclick="App.goTo('grades')"><span class="material-symbols-rounded">grade</span> Mes notes</button>
+    <p class="page-brief">Vue d'ensemble de tes matières et de tes priorités.</p>
+    
+    <div class="dash-top-row" style="display:grid;grid-template-columns:1.5fr 1fr;gap:16px;margin-bottom:24px">
+      <div class="welcome-banner" id="welcomeBanner" style="margin-bottom:0">
+        <h2 id="dashGreeting">Bonjour !</h2>
+        <p>Gère tes cours et tes devoirs sereinement.</p>
+        <div class="wb-actions">
+          <button class="btn-filled" onclick="App.goTo('timetable')"><span class="material-symbols-rounded">grid_view</span> Emploi du temps</button>
+          <button class="btn-tonal" onclick="App.goTo('grades')"><span class="material-symbols-rounded">grade</span> Mes moyennes</button>
+        </div>
+      </div>
+      
+      <div class="countdown-banner" id="countdownBanner" style="background:var(--md-secondary-ctr);border-radius:24px;padding:24px;display:flex;flex-direction:column;justify-content:center;color:var(--md-on-secondary-ctr)">
+        <div id="countdownContent">
+          <div class="empty-hint">Aucune échéance proche</div>
+        </div>
       </div>
     </div>
+
     <div class="dash-grid">
       <div class="dash-card dc-subjects" onclick="App.goTo('subjects')"><div class="dc-icon"><span class="material-symbols-rounded">auto_stories</span></div><div class="dc-val" id="statSubjects">—</div><div class="dc-lbl">Matières</div></div>
       <div class="dash-card dc-notes" onclick="App.goTo('notes')"><div class="dc-icon"><span class="material-symbols-rounded">edit_note</span></div><div class="dc-val" id="statNotes">—</div><div class="dc-lbl">Notes de cours</div></div>
-      <div class="dash-card dc-hours" onclick="App.goTo('progress')"><div class="dc-icon"><span class="material-symbols-rounded">timer</span></div><div class="dc-val" id="statHours">—</div><div class="dc-lbl">Heures révisées</div></div>
+      <div class="dash-card dc-tasks" onclick="App.goTo('subjects')"><div class="dc-icon"><span class="material-symbols-rounded">task_alt</span></div><div class="dc-val" id="statTasks">—</div><div class="dc-lbl">Tâches à faire</div></div>
     </div>
     <div class="dash-2col">
       <div class="dash-tile">
@@ -84,20 +93,15 @@
         <div class="activity-list" id="recentNotesList"><div class="empty-hint">Aucune note</div></div>
       </div>
       <div class="dash-tile">
-        <div class="dash-tile-head"><span class="material-symbols-rounded">bar_chart</span>Activité 7 jours</div>
-        <div class="week-bars" id="weekBars"></div>
-        <div class="week-total-lbl" id="weekTotalLbl"></div>
+        <div class="dash-tile-head"><span class="material-symbols-rounded">insights</span>Tâches par matière</div>
+        <div class="subj-prog-list" id="dashSubjProg"><div class="empty-hint">Aucune matière</div></div>
       </div>
-    </div>
-    <div class="dash-tile">
-      <div class="dash-tile-head"><span class="material-symbols-rounded">insights</span>Progression par matière<a href="#progress" onclick="App.goTo('progress');return false">Détails</a></div>
-      <div class="subj-prog-list" id="dashSubjProg"><div class="empty-hint">Aucune matière</div></div>
     </div>
   </div>
 
   <!-- SUBJECTS -->
   <div class="page" id="page-subjects">
-    <p class="page-brief">Gère tes matières et organise ton suivi de révision par thème.</p>
+    <p class="page-brief">Gère tes matières et organise ton suivi d'études par thème.</p>
     <div class="page-top">
       <button class="btn-page-action" onclick="SubjectsPage.openNew()"><span class="material-symbols-rounded">add</span>Nouvelle matière</button>
     </div>
@@ -112,7 +116,7 @@
 
   <!-- RESOURCES -->
   <div class="page" id="page-resources">
-    <p class="page-brief">Centralise tes liens, vidéos et contenus utiles pour réviser.</p>
+    <p class="page-brief">Centralise tes liens, vidéos et contenus utiles pour tes études.</p>
     <div class="toolbar">
       <div class="type-tabs" id="resTypeTabs">
         <button class="type-tab active" data-type=""><span class="material-symbols-rounded">apps</span> Tout</button>
@@ -152,17 +156,6 @@
 
   <!-- SETTINGS -->
   <div class="page" id="page-settings"></div>
-
-  <!-- PROGRESS -->
-  <div class="page" id="page-progress">
-    <p class="page-brief">Analyse tes statistiques de travail et ta progression par matière.</p>
-    <div class="prog-grid">
-      <div class="prog-card full"><div class="prog-card-title"><span class="material-symbols-rounded">bar_chart</span> Heures de révision — 7 derniers jours</div><div class="bar-chart" id="progBarChart"></div></div>
-      <div class="prog-card"><div class="prog-card-title"><span class="material-symbols-rounded">donut_large</span> Tâches</div><div class="donut-wrap" id="progDonut"></div></div>
-      <div class="prog-card"><div class="prog-card-title"><span class="material-symbols-rounded">timer</span> Sessions</div><div class="sess-stats" id="progSessions"></div></div>
-      <div class="prog-card full"><div class="prog-card-title"><span class="material-symbols-rounded">insights</span> Progression par matière</div><div class="subj-prog-list" id="progBySubject"></div></div>
-    </div>
-  </div>
 </div>
 
 <!-- MODALS -->
@@ -237,7 +230,6 @@
 
 <!-- TIMETABLE MODAL -->
 <div class="modal-scrim" id="modalTimetable">
-  <!-- Panel détail -->
   <div class="modal" id="ttPanelDetail" style="max-width:360px;display:none">
     <div class="modal-header"><h2 class="modal-title">Détail du cours</h2><button class="icon-btn" onclick="App.closeModal('modalTimetable')"><span class="material-symbols-rounded">close</span></button></div>
     <div class="modal-body" id="ttDetailBody"></div>
@@ -246,7 +238,6 @@
       <button class="btn-filled" id="ttDetailEditBtn">Modifier</button>
     </div>
   </div>
-  <!-- Panel édition -->
   <div class="modal" id="ttPanelEdit" style="display:none">
     <div class="modal-header"><h2 class="modal-title" id="modalTtTitle">Ajouter un cours</h2><button class="icon-btn" onclick="App.closeModal('modalTimetable')"><span class="material-symbols-rounded">close</span></button></div>
     <div class="modal-body">
@@ -343,7 +334,6 @@
   </div>
 </div>
 
-<!-- POMODORO FAB -->
 <button class="pomo-fab" id="pomoFab" onclick="PomodoroTimer.open()" title="Timer Pomodoro">
   <span class="material-symbols-rounded">timer</span>
   <span class="pomo-fab-label"></span>
@@ -358,7 +348,6 @@
 <script src="/js/subjects.js"></script>
 <script src="/js/notes.js"></script>
 <script src="/js/resources.js"></script>
-<script src="/js/progress.js"></script>
 <script src="/js/settings.js"></script>
 <script src="/js/timetable.js"></script>
 <script src="/js/grades.js"></script>

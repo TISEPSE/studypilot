@@ -10,7 +10,6 @@ module.exports = function initSchema(db) {
       color TEXT NOT NULL DEFAULT '#6750A4',
       icon TEXT NOT NULL DEFAULT 'book',
       description TEXT DEFAULT '',
-      target_hours INTEGER DEFAULT 0,
       created_at TEXT DEFAULT (datetime('now')),
       updated_at TEXT DEFAULT (datetime('now'))
     );
@@ -46,29 +45,11 @@ module.exports = function initSchema(db) {
       done INTEGER DEFAULT 0,
       done_at TEXT DEFAULT NULL,
       created_at TEXT DEFAULT (datetime('now')),
-      updated_at TEXT DEFAULT (datetime('now'))
-    );
-
-    CREATE TABLE IF NOT EXISTS sessions (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      subject_id INTEGER REFERENCES subjects(id) ON DELETE SET NULL,
-      title TEXT DEFAULT '',
-      date TEXT NOT NULL,
-      start_time TEXT NOT NULL,
-      end_time TEXT NOT NULL,
-      duration_min INTEGER DEFAULT 0,
-      notes TEXT DEFAULT '',
-      done INTEGER DEFAULT 0,
-      created_at TEXT DEFAULT (datetime('now'))
-    );
-
-    CREATE TABLE IF NOT EXISTS progress_logs (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      subject_id INTEGER REFERENCES subjects(id) ON DELETE SET NULL,
-      session_id INTEGER REFERENCES sessions(id) ON DELETE CASCADE,
-      minutes INTEGER NOT NULL DEFAULT 0,
-      date TEXT NOT NULL,
-      created_at TEXT DEFAULT (datetime('now'))
+      updated_at TEXT DEFAULT (datetime('now')),
+      type TEXT NOT NULL DEFAULT 'autre',
+      kanban_status TEXT NOT NULL DEFAULT 'todo',
+      subtasks TEXT NOT NULL DEFAULT '[]',
+      estimated_time INTEGER NOT NULL DEFAULT 0
     );
 
     CREATE TABLE IF NOT EXISTS timetable (
@@ -96,33 +77,6 @@ module.exports = function initSchema(db) {
       created_at TEXT DEFAULT (datetime('now'))
     );
   `);
-
-  // Migrations timetable
-  for (const [col, def] of [
-    ['room', "TEXT DEFAULT ''"],
-    ['teacher', "TEXT DEFAULT ''"],
-    ['type', "TEXT DEFAULT 'Cours'"],
-    ['week', "TEXT DEFAULT 'both'"],
-  ]) {
-    try { db.exec(`ALTER TABLE timetable ADD COLUMN ${col} ${def}`); } catch(_) {}
-  }
-
-  // Migrations grades
-  for (const [col, def] of [
-    ['type', "TEXT DEFAULT 'devoir'"],
-  ]) {
-    try { db.exec(`ALTER TABLE grades ADD COLUMN ${col} ${def}`); } catch(_) {}
-  }
-
-  // Migrations tasks
-  for (const [col, def] of [
-    ['type', "TEXT NOT NULL DEFAULT 'autre'"],
-    ['kanban_status', "TEXT NOT NULL DEFAULT 'todo'"],
-    ['subtasks', "TEXT NOT NULL DEFAULT '[]'"],
-    ['estimated_time', "INTEGER NOT NULL DEFAULT 0"],
-  ]) {
-    try { db.exec(`ALTER TABLE tasks ADD COLUMN ${col} ${def}`); } catch(_) {}
-  }
 
   // Insertion des matières par défaut si vide
   const count = db.prepare('SELECT COUNT(*) as c FROM subjects').get().c;

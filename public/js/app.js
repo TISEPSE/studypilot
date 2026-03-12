@@ -93,7 +93,6 @@ const App = {
       case 'resources': await ResourcesPage.load(); break;
       case 'timetable': await TimetablePage.load(); break;
       case 'grades':    await GradesPage.load(); break;
-      case 'progress':  await ProgressPage.load(); break;
       case 'settings':  await SettingsPage.load(); break;
     }
 

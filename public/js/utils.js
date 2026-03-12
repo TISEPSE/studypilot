@@ -75,28 +75,5 @@ function renderIconPicker(containerId, selected, onSelect) {
       opt.classList.add('selected');
       if (onSelect) onSelect(opt.dataset.icon);
     };
-  });
-}
-
-// Sous-progress liste (dashboard + progress page)
-function renderSubjProgList(subjects) {
-  if (!subjects.length) return '<div class="empty-hint">Aucune matière</div>';
-  return subjects.map(s => {
-    const pct = s.target_hours > 0 ? Math.min(100, Math.round(s.total_minutes / (s.target_hours * 60) * 100)) : null;
-    return `
-      <div class="subj-prog-item">
-        <div class="subj-prog-icon" style="background:${hexAlpha(s.color||'#006B5E',.15)}">
-          <span class="material-symbols-rounded" style="color:${escHtml(s.color||'#006B5E')}">${escHtml(s.icon||'book')}</span>
-        </div>
-        <div class="subj-prog-body">
-          <div class="subj-prog-row">
-            <span class="subj-prog-name">${escHtml(s.name)}</span>
-            <span class="subj-prog-val">${fmtMinutes(s.total_minutes||0)}${pct !== null ? ` · ${pct}%` : ''}</span>
-          </div>
-          <div class="prog-bar">
-            <div class="prog-bar-fill" style="width:${pct !== null ? pct : 0}%;background:${s.color||'#006B5E'};${pct === null ? 'opacity:0' : ''}"></div>
-          </div>
-        </div>
-      </div>`;
   }).join('');
-}
+  }

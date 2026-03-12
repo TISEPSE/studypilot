@@ -12,7 +12,29 @@ const DashboardPage = {
 
     document.getElementById('statSubjects').textContent = stats.subjects_count;
     document.getElementById('statNotes').textContent = stats.notes_count;
-    document.getElementById('statHours').textContent = fmtMinutes(stats.total_minutes);
+    document.getElementById('statTasks').textContent = stats.tasks_pending;
+
+    // Countdown Banner
+    const countdownEl = document.getElementById('countdownContent');
+    if (stats.next_exam) {
+      const exam = stats.next_exam;
+      const days = Math.ceil(exam.days_left);
+      countdownEl.innerHTML = `
+        <div style="font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:700;opacity:0.8;margin-bottom:8px">Prochaine échéance</div>
+        <div style="font-size:20px;font-weight:700;line-height:1.2;margin-bottom:4px">${escHtml(exam.title)}</div>
+        <div style="font-size:14px;opacity:0.9;margin-bottom:12px">${escHtml(exam.subject_name)}</div>
+        <div style="display:flex;align-items:baseline;gap:6px">
+          <span style="font-size:32px;font-weight:800">${days === 0 ? 'Aujourd\'hui' : days}</span>
+          <span style="font-size:16px;font-weight:600">${days > 0 ? (days === 1 ? 'jour' : 'jours') : ''}</span>
+        </div>
+      `;
+      document.getElementById('countdownBanner').style.background = hexAlpha(exam.subject_color || '#6750A4', 1);
+      document.getElementById('countdownBanner').style.color = '#fff';
+    } else {
+      countdownEl.innerHTML = '<div class="empty-hint" style="color:inherit;opacity:0.7">Aucun examen ou devoir prévu</div>';
+      document.getElementById('countdownBanner').style.background = 'var(--md-surface-ctr-high)';
+      document.getElementById('countdownBanner').style.color = 'var(--md-on-surface-var)';
+    }
 
     // Today's timetable
     const todayIdx = new Date().getDay()===0?6:new Date().getDay()-1;
@@ -33,7 +55,7 @@ const DashboardPage = {
     const urgentEl = document.getElementById('dashUrgentTasks');
     if(urgentEl) urgentEl.innerHTML = stats.urgent_tasks?.length
       ? stats.urgent_tasks.map(t=>`
-          <div class="act-item" onclick="App.goTo('tasks')">
+          <div class="act-item" onclick="App.goTo('subjects')">
             <div class="act-dot" style="background:${t.subject_color||'#BA1A1A'}"></div>
             <div class="act-main">
               <div class="act-name">${escHtml(t.title)}</div>
@@ -56,25 +78,31 @@ const DashboardPage = {
           </div>`).join('')
       : '<div class="empty-hint">Aucune note</div>';
 
-    this._renderWeekBars(stats.daily_activity);
-    document.getElementById('weekTotalLbl').textContent=`${fmtMinutes(stats.week_minutes)} révisées cette semaine`;
-    document.getElementById('dashSubjProg').innerHTML=renderSubjProgList(stats.by_subject);
+    document.getElementById('dashSubjProg').innerHTML=this._renderSubjTaskList(stats.by_subject);
   },
 
-  _renderWeekBars(data) {
-    const days=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
-    const map={}; data.forEach(d=>{map[d.date]=d.minutes;});
-    const slots=[];
-    for(let i=6;i>=0;i--){
-      const d=new Date(); d.setDate(d.getDate()-i);
-      const key=d.toISOString().split('T')[0];
-      slots.push({day:days[d.getDay()===0?6:d.getDay()-1],minutes:map[key]||0});
-    }
-    const max=Math.max(...slots.map(s=>s.minutes),1);
-    document.getElementById('weekBars').innerHTML=slots.map(s=>`
-      <div class="wbar-col">
-        <div class="wbar-track"><div class="wbar-fill" style="height:${Math.round(s.minutes/max*100)}%"></div></div>
-        <div class="wbar-lbl">${s.day}</div>
-      </div>`).join('');
+  _renderSubjTaskList(subjects) {
+    if (!subjects.length) return '<div class="empty-hint">Aucune matière</div>';
+    return subjects.map(s => {
+      const total = s.total_tasks || 0;
+      const pending = s.pending_tasks || 0;
+      const done = total - pending;
+      const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+      return `
+        <div class="subj-prog-item">
+          <div class="subj-prog-icon" style="background:${hexAlpha(s.color||'#006B5E',.15)}">
+            <span class="material-symbols-rounded" style="color:${escHtml(s.color||'#006B5E')}">${escHtml(s.icon||'book')}</span>
+          </div>
+          <div class="subj-prog-body">
+            <div class="subj-prog-row">
+              <span class="subj-prog-name">${escHtml(s.name)}</span>
+              <span class="subj-prog-val">${done}/${total} tâches</span>
+            </div>
+            <div class="prog-bar">
+              <div class="prog-bar-fill" style="width:${pct}%;background:${s.color||'#006B5E'}"></div>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
   }
 };

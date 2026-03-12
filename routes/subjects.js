@@ -8,8 +8,7 @@ router.get('/', (req, res) => {
     SELECT s.*,
       (SELECT COUNT(*) FROM notes n WHERE n.subject_id = s.id) as note_count,
       (SELECT COUNT(*) FROM tasks t WHERE t.subject_id = s.id AND t.done = 0) as pending_tasks,
-      (SELECT COUNT(*) FROM tasks t WHERE t.subject_id = s.id AND t.done = 1) as done_tasks,
-      (SELECT COALESCE(SUM(p.minutes),0) FROM progress_logs p WHERE p.subject_id = s.id) as total_minutes
+      (SELECT COUNT(*) FROM tasks t WHERE t.subject_id = s.id AND t.done = 1) as done_tasks
     FROM subjects s ORDER BY s.name ASC
   `).all();
   res.json(subjects);
