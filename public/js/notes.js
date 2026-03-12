@@ -97,7 +97,6 @@ const NotesPage = {
     document.getElementById('noteId').value = '';
     document.getElementById('noteTitle').value = '';
     document.getElementById('noteContent').value = '';
-    document.getElementById('noteSubject').value = this._selectedSubjectId || '';
     document.getElementById('notePinned').checked = false;
     document.getElementById('noteDeleteBtn').style.display = 'none';
     document.getElementById('modalNoteTitle').textContent = 'Nouvelle note';
@@ -111,7 +110,6 @@ const NotesPage = {
     document.getElementById('noteId').value = n.id;
     document.getElementById('noteTitle').value = n.title;
     document.getElementById('noteContent').value = n.content || '';
-    document.getElementById('noteSubject').value = n.subject_id || '';
     document.getElementById('notePinned').checked = !!n.pinned;
     document.getElementById('noteDeleteBtn').style.display = '';
     document.getElementById('modalNoteTitle').textContent = 'Modifier la note';
@@ -134,7 +132,7 @@ const NotesPage = {
     const data = {
       title: document.getElementById('noteTitle').value.trim(),
       content: document.getElementById('noteContent').value,
-      subject_id: document.getElementById('noteSubject').value || null,
+      subject_id: this._selectedSubjectId || null,
       pinned: document.getElementById('notePinned').checked ? 1 : 0,
     };
     if (!data.title) { toast('Le titre est requis', 'error'); return; }
@@ -163,7 +161,7 @@ const NotesPage = {
     ResourcesPage.setType('link');
     document.getElementById('resourceTitle').value = '';
     document.getElementById('resourceUrl').value = '';
-    document.getElementById('resourceSubject').value = document.getElementById('noteSubject').value || '';
+    // ResourcesPage.save automatically uses the current subject
     App.openModal('modalResource');
   },
 
