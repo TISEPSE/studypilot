@@ -2,7 +2,7 @@
 const PAGE_TITLES = {
   dashboard:'Tableau de bord',timetable:'Emploi du temps',subjects:'Matières',
   notes:'Notes de cours',resources:'Ressources',
-  grades:'Notes & Moyennes',progress:'Progression',settings:'Paramètres'
+  grades:'Moyennes',progress:'Progression',settings:'Paramètres'
 };
 const App = {
   subjects:[],
