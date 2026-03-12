@@ -94,7 +94,7 @@ function renderSubjProgList(subjects) {
             <span class="subj-prog-val">${fmtMinutes(s.total_minutes||0)}${pct !== null ? ` · ${pct}%` : ''}</span>
           </div>
           <div class="prog-bar">
-            <div class="prog-bar-fill" style="width:${pct !== null ? pct : 30}%;background:${s.color||'#006B5E'};${pct === null ? 'opacity:.25' : ''}"></div>
+            <div class="prog-bar-fill" style="width:${pct !== null ? pct : 0}%;background:${s.color||'#006B5E'};${pct === null ? 'opacity:0' : ''}"></div>
           </div>
         </div>
       </div>`;

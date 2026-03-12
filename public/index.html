@@ -107,14 +107,7 @@
   <!-- NOTES -->
   <div class="page" id="page-notes">
     <p class="page-brief">Crée, retrouve et classe rapidement tes notes de cours.</p>
-    <div class="toolbar toolbar-stack notes-toolbar">
-      <div class="search-field"><span class="material-symbols-rounded">search</span><input type="text" id="notesSearch" placeholder="Rechercher une note…"></div>
-      <div class="toolbar-actions">
-        <select id="notesFilter" class="filter-select"><option value="">Toutes les matières</option></select>
-        <button class="btn-page-action notes-new-btn" onclick="NotesPage.openNew()"><span class="material-symbols-rounded">add</span>Nouvelle note</button>
-      </div>
-    </div>
-    <div class="notes-grid" id="notesGrid"></div>
+    <div id="notesContent"></div>
   </div>
 
   <!-- RESOURCES -->
@@ -154,10 +147,6 @@
   <!-- GRADES -->
   <div class="page" id="page-grades">
     <p class="page-brief">Saisis tes notes et suis tes moyennes pondérées par matière.</p>
-    <div class="toolbar">
-      <select id="gradesFilter" class="filter-select" style="height:44px"><option value="">Toutes les matières</option></select>
-      <button class="btn-page-action" onclick="GradesPage.openNew()"><span class="material-symbols-rounded">add</span>Ajouter une note</button>
-    </div>
     <div id="gradesContent"></div>
   </div>
 

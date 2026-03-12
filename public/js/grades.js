@@ -15,6 +15,7 @@ const GradesPage = {
 
   _render() {
     const content = document.getElementById('gradesContent');
+    if (!content) return;
     const subjects = App.subjects;
 
     if (this._selectedSubjectId) {
@@ -73,6 +74,7 @@ const GradesPage = {
           <h2 class="gd-title">${escHtml(subj.name)}</h2>
           ${avg !== null ? `<span class="gs-avg ${avgClass}">${avg.toFixed(2)}/20</span>` : ''}
         </div>
+        <button class="btn-page-action" onclick="GradesPage.openNew()"><span class="material-symbols-rounded">add</span> Ajouter une note</button>
       </div>
       <div class="grades-table">
         <div class="gt-header"><span>Intitulé</span><span>Type</span><span>Note</span><span>Coeff.</span><span>Date</span><span></span></div>

@@ -50,12 +50,12 @@ a{color:inherit;text-decoration:none}
 /* ── Loading ───────────────────────────────────────────────── */
 /* ── Loading splash ─────────────────────────────────────────── */
 .loading-overlay{
-  position:fixed;inset:0;z-index:1200;
+  position:fixed;inset:0;z-index:9999;
   background:var(--md-surface);
   display:flex;align-items:center;justify-content:center;
-  transition:opacity .35s ease,transform .35s ease;
+  transition:opacity .5s ease, visibility .5s;
 }
-.loading-overlay.hide{opacity:0;pointer-events:none;transform:scale(1.02)}
+.loading-overlay.hide{opacity:0;visibility:hidden}
 .loading-box{
   display:flex;flex-direction:column;align-items:center;gap:16px;
 }
@@ -217,9 +217,9 @@ a{color:inherit;text-decoration:none}
 .btn-small .material-symbols-rounded{font-size:16px}
 
 /* ── Pages ─────────────────────────────────────────────────── */
-.page{display:none;padding:8px 24px 120px;animation:pgIn .3s ease}
+.page{display:none;padding:8px 24px 120px;animation:pgIn .4s cubic-bezier(0.4, 0, 0.2, 1)}
 .page.active{display:block}
-@keyframes pgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes pgIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .page-brief{
   font-size:13px;
   color:var(--md-on-surface-var);
